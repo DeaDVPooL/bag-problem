@@ -1,0 +1,44 @@
+题目描述
+农民john面临一个很可怕的事实，因为防范失措他存储的所有稻草给澳大利亚蟑螂吃光了，他将面临没有稻草喂养奶牛的局面。在奶牛断粮之前，john拉着他的马车到农民Don的农场中买一些稻草给奶牛过冬。已知john的马车可以装的下C(1 <= C <=50,000)立方的稻草。
+农民Don有H(1 <= H <= 5,000)捆体积不同的稻草可供购买，每一捆稻草有它自己的体积(1 <= V_i <= C)。面对这些稻草john认真的计算如何充分利用马车的空间购买尽量多的稻草给他的奶牛过冬。
+现在给定马车的最大容积C和每一捆稻草的体积Vi，john如何在不超过马车最大容积的情况下买到最大体积的稻草？他不可以把一捆稻草分开来买。
+
+输入输出格式
+输入格式：
+第一行两个整数，分别为C和H
+第2..H+1行:每一行一个整数代表第i捆稻草的体积Vi
+
+输出格式：
+
+一个整数，为john能买到的稻草的体积。
+输入输出样例
+输入样例#1：
+7 3
+2
+6
+5
+输出样例#1：
+7
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    int c,h;
+    cin>>c>>h;
+    vector<int> v(h+1);
+    for(int i=1;i<=h;i++)   cin>>v[i];
+    vector<int> sum(h+1,0);
+    for(int i=1;i<=h;i++)   sum[i] = sum[i-1]+v[i];
+    vector<int> dp(c+1);
+    for(int i=1;i<=h;i++)
+    {
+        int bound = max(c-sum[h]+sum[i],v[i]);
+        for(int j=c;j>=bound;j--)
+            dp[j] = max(dp[j],dp[j-v[i]]+v[i]);
+    }
+    cout<<dp[c]<<endl;
+    return 0;
+}
