@@ -1,0 +1,67 @@
+Problem Description
+Recently, iSea went to an ancient country. For such a long time, it was the most wealthy and powerful kingdom in the world. 
+As a result, the people in this country are still very proud even if their nation hasn’t been so wealthy any more.
+The merchants were the most typical, each of them only sold exactly one item, the price was Pi, but they would refuse to make
+a trade with you if your money were less than Qi, and iSea evaluated every item a value Vi.
+If he had M units of money, what’s the maximum value iSea could get?
+
+Input
+There are several test cases in the input.
+
+Each test case begin with two integers N, M (1 ≤ N ≤ 500, 1 ≤ M ≤ 5000), indicating the items’ number and the initial money.
+Then N lines follow, each line contains three numbers Pi, Qi and Vi (1 ≤ Pi ≤ Qi ≤ 100, 1 ≤ Vi ≤ 1000), their meaning is in 
+the description.
+
+The input terminates by end of file marker.
+
+Output
+For each test case, output one integer, indicating maximum value iSea could get.
+
+Sample Input
+2 10
+10 15 10
+5 10 5
+3 10
+5 10 5
+3 5 6
+2 7 3
+
+Sample Output
+5
+11
+
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct node
+{
+    int p,q,v;
+};
+bool cmp(const node& A,const node& B)
+{
+    return A.q-A.p<B.q-B.p;
+}
+int main()
+{
+    int n,m;
+    while(cin>>n>>m)
+    {
+        vector<node> a(n);
+        vector<int> dp(m+1,0);
+        for(int i=0;i<n;i++)    cin>>a[i].p>>a[i].q>>a[i].v;
+        sort(a.begin(),a.end(),cmp);
+        for(int i=0;i<n;i++)
+        {
+            for(int j=m;j>=a[i].q;j--)
+                dp[j] = max(dp[j],dp[j-a[i].p]+a[i].v);
+        }
+        cout<<dp[m]<<endl;
+
+    }
+    return 0;
+}
