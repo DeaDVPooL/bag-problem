@@ -1,0 +1,59 @@
+
+Problem Description
+ACboy has N courses this term, and he plans to spend at most M days on study.Of course,the profit he will gain from different course depending on the days he spend on it.How to arrange the M days for the N courses to maximize the profit?
+ 
+
+Input
+The input consists of multiple data sets. A data set starts with a line containing two positive integers N and M, N is the number of courses, M is the days ACboy has.
+Next follow a matrix A[i][j], (1<=i<=N<=100,1<=j<=M<=100).A[i][j] indicates if ACboy spend j days on ith course he will get profit of value A[i][j].
+N = 0 and M = 0 ends the input.
+ 
+
+Output
+For each data set, your program should output a line which contains the number of the max profit ACboy will gain.
+ 
+
+Sample Input
+2 2
+1 2
+1 3
+2 2
+2 1
+2 1
+2 3
+3 2 1
+3 2 1
+0 0
+ 
+
+Sample Output
+3
+4
+6
+ 
+ 
+ 
+ #include <iostream>
+#include <cstring>
+using namespace std;
+const int maxn = 110;
+int mp[maxn][maxn];
+int dp[maxn];
+int main()
+{
+    int n,m;
+    while(cin>>n>>m)
+    {
+        if(n==0&&m==0)  break;
+        for(int i=1;i<=n;i++)
+			for(int j=1;j<=m;j++)
+				scanf("%d",&mp[i][j]);
+		memset(dp,0,sizeof(dp));
+		for(int i=1;i<=n;i++)
+			for(int j=m;j>=1;j--)
+				for(int k=1;k<=j;k++)
+					dp[j]=max(dp[j],dp[j-k]+mp[i][k]);
+		printf("%d\n",dp[m]);
+    }
+    return 0;
+}
