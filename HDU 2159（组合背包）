@@ -1,0 +1,75 @@
+Problem Description
+最近xhd正在玩一款叫做FATE的游戏，为了得到极品装备，xhd在不停的杀怪做任务。久而久之xhd开始对杀怪产生的厌恶感，
+但又不得不通过杀怪来升完这最后一级。现在的问题是，xhd升掉最后一级还需n的经验值，xhd还留有m的忍耐度，每杀一个
+怪xhd会得到相应的经验，并减掉相应的忍耐度。当忍耐度降到0或者0以下时，xhd就不会玩这游戏。xhd还说了他最多只杀s
+只怪。请问他能升掉这最后一级吗？
+ 
+
+Input
+输入数据有多组，对于每组数据第一行输入n，m，k，s(0 < n,m,k,s < 100)四个正整数。分别表示还需的经验值，保留的
+忍耐度，怪的种数和最多的杀怪数。接下来输入k行数据。每行数据输入两个正整数a，b(0 < a,b < 20)；分别表示杀掉一只
+这种怪xhd会得到的经验值和会减掉的忍耐度。(每种怪都有无数个)
+ 
+
+Output
+输出升完这级还能保留的最大忍耐度，如果无法升完这级输出-1。
+ 
+
+Sample Input
+10 10 1 10
+1 1
+10 10 1 9
+1 1
+9 10 2 10
+1 1
+2 2
+ 
+
+Sample Output
+0
+-1
+1
+
+
+
+
+#include <iostream>
+#include <vector>
+#define INF 1000000000
+using namespace std;
+struct node
+{
+    int a,b;
+};
+int main()
+{
+    int m,n,k,s;
+    while(cin>>n>>m>>k>>s)
+    {
+        vector<vector<int> > dp(m+1,vector<int>(s+1,-INF));
+        dp[0][0] = 0;
+        vector<node> monster(k);
+        for(int i=0;i<k;i++)    cin>>monster[i].a>>monster[i].b;
+        for(int i=0;i<k;i++)
+            for(int j=monster[i].b;j<=m;j++)
+                for(int k=1;k<=s;k++)
+                    dp[j][k] = max(dp[j][k],dp[j-monster[i].b][k-1]+monster[i].a);
+        int ans = -1,flag = 0;
+        for(int i=0;i<=m;i++)
+        {
+            for(int j=0;j<=s;j++)
+            {
+                if(dp[i][j]>=n)
+                {
+                    ans = m-i;
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag==1)    break;
+        }
+
+        cout<<ans<<endl;
+    }
+    return 0;
+}
