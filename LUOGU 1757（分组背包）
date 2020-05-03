@@ -1,0 +1,61 @@
+题目背景
+直达通天路·小 A 历险记第二篇
+
+题目描述
+自 0101 背包问世之后，小 A 对此深感兴趣。一天，小 A 去远游，却发现他的背包不同于 0101 背包，
+他的物品大致可分为 kk 组，每组中的物品相互冲突，现在，他想知道最大的利用价值是多少。
+
+输入格式
+两个数 m,nm,n，表示一共有 nn 件物品，总重量为 mm。
+
+接下来 nn 行，每行 33 个数 a_i,b_i,c_i，表示物品的重量，利用价值，所属组数。
+
+输出格式
+一个数，最大的利用价值。
+
+输入输出样例
+45 3
+10 10 1
+10 5 1
+50 400 2
+
+
+10
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+struct node
+{
+    int w,v;
+};
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    map<int,vector<node> > dict;
+    int a,b,c;
+    vector<int> dp(m+1,0);
+    for(int i=0;i<n;i++)
+    {
+        cin>>a>>b>>c;
+        dict[c].emplace_back(node{a,b});
+    }
+    for(auto it=dict.begin();it!=dict.end();it++)
+    {
+        for(int j=m;j>=0;j--)
+        {
+            for(int k=0;k<it->second.size();k++)
+            {
+                if(j>=it->second[k].w)
+                    dp[j] = max(dp[j],dp[j-it->second[k].w]+it->second[k].v);
+            }
+        }
+    }
+    cout<<dp[m]<<endl;
+    return 0;
+}
